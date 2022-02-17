@@ -105,7 +105,7 @@ def get_app_info(target_app_project_dir: Path, target_app_dist_dir: Path) -> App
     else:
 
         wheel_list = list(target_app_dist_dir.glob(f"{app_info.name}*.whl"))
-        if len(wheel_list) == 0:
+        if not wheel_list:
             log.error(f"{app_info.name} : no wheel at {target_app_dist_dir} ({target_app_dist_dir.absolute()})")
         elif len(wheel_list) > 1:
             log.error(f"multiple wheels at {target_app_dist_dir} : {wheel_list}")

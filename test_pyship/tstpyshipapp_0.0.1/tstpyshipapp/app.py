@@ -18,7 +18,7 @@ log = get_logger(logger_name)
 
 def tstpyshipapp():
 
-    verbose = len(sys.argv) > 1 and (sys.argv[1].lower() == "-v" or sys.argv[1].lower() == "--verbose")
+    verbose = len(sys.argv) > 1 and sys.argv[1].lower() in ["-v", "--verbose"]
 
     balsa = Balsa(logger_name, pyship_author, verbose=verbose)
     balsa.init_logger()
@@ -27,11 +27,7 @@ def tstpyshipapp():
     log.info(f"app {version=}")
 
     updater = UpdaterAwsS3(name, pyship_author)
-    if updater.update(version):
-        exit_code = restart_return_code  # app has been updated so restart to run the updated version
-    else:
-        exit_code = ok_return_code
-
+    exit_code = restart_return_code if updater.update(version) else ok_return_code
     output = {"name": name, "version": version, "exit_code": exit_code}
     print(json.dumps(output))
     sys.exit(exit_code)

@@ -12,7 +12,7 @@ if is_main():
 
     exe_path = Path("app", __application_name__, f"{__application_name__}.exe").resolve().absolute()
     print(exe_path)
-    for iteration in range(0, 6):
+    for iteration in range(6):
         start = time.time()
         launcher_process = subprocess.run(exe_path, cwd=exe_path.parent, capture_output=True)  # the launcher won't actually work, but we're just trying to time it
         end = time.time()

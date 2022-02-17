@@ -28,10 +28,6 @@ def cleanup_clips():
 @pytest.fixture(scope="session", autouse=True)
 def session_fixture():
 
-    # todo: get all tests to work with moto. Currently there's an error when the tstpyshipapp apps run since they're trying to access a non-existent bucket (moto creates everything on the fly)
-    if False:
-        os.environ[use_moto_mock_env_var] = "1"
-
     balsa = Balsa(pyship_application_name, pyship_author, log_directory=Path("log", "pytest"), delete_existing_log_files=True, verbose=False)
 
     # add handler that will throw an assert on ERROR or greater

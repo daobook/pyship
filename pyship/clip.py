@@ -155,7 +155,7 @@ def install_target_app(module_name: str, python_env_dir: Path, target_app_packag
     if remove_pth:
         # remove python*._pth
         # https://github.com/PythonCharmers/python-future/issues/411
-        pth_glob_list = [p for p in Path(python_env_dir).glob("python*._pth")]
+        pth_glob_list = list(Path(python_env_dir).glob("python*._pth"))
         if len(pth_glob_list) == 1:
             pth_path = str(pth_glob_list[0])
             pth_save_path = pth_path.replace("._pth", "._future_bug_pth")

@@ -22,7 +22,7 @@ def test_check_app_output():
         print(app_out)
         assert app_out["name"] == TST_APP_NAME
         app_version = app_out["version"]
-        assert VersionInfo.parse(app_version) == version or VersionInfo.parse(app_version) == version.bump_patch()  # allow either original or upgraded version
+        assert VersionInfo.parse(app_version) in [version, version.bump_patch()]
         assert app_out["exit_code"] == ok_return_code
 
     tst_app_dirs = TstAppDirs(TST_APP_NAME, version)

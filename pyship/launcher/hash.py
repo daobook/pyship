@@ -6,8 +6,7 @@ import hashlib
 def _get_string_hash(s, hash_function):
     hash_object = hash_function()
     hash_object.update(s.encode())
-    hash_str = hash_object.hexdigest().lower()
-    return hash_str
+    return hash_object.hexdigest().lower()
 
 
 def get_string_md5(s):
@@ -38,13 +37,9 @@ def _get_file_hash(file_path, hash_function):
     hash_object = hash_function()
 
     bucket_size = 4096  # for speed
-    f = open(file_path, "rb")
-    val = f.read(bucket_size)
-    while len(val) > 0:
-        hash_object.update(val)
+    with open(file_path, "rb") as f:
         val = f.read(bucket_size)
-    f.close()
-
-    hash_str = hash_object.hexdigest().lower()
-
-    return hash_str
+        while len(val) > 0:
+            hash_object.update(val)
+            val = f.read(bucket_size)
+    return hash_object.hexdigest().lower()

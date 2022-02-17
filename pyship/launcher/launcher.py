@@ -65,7 +65,7 @@ def setup_logging(is_gui: bool, report_exceptions: bool) -> bool:
         if ht in pyship_log.handlers:
             pyship_log.handlers[ht].setLevel(logging.ERROR)
 
-    if len(exception_string) > 0:
+    if exception_string != '':
         log.info(exception_string)  # don't present these to the user unless verbose selected
 
     log.info(f"{verbose=}")
@@ -137,10 +137,7 @@ def launch(additional_path: Path = None, app_dir: Path = None) -> int:
 
             candidate_dirs = []
             for search_dir in search_dirs:
-                for d in search_dir.glob(glob_string):
-                    if d.is_dir():
-                        candidate_dirs.append(d)
-
+                candidate_dirs.extend(d for d in search_dir.glob(glob_string) if d.is_dir())
             versions = {}
             for candidate_dir in candidate_dirs:
                 matches = re.match(clip_regex, candidate_dir.name)
@@ -155,7 +152,7 @@ def launch(additional_path: Path = None, app_dir: Path = None) -> int:
                     else:
                         log.error(f"could not get version out of {candidate_dir}")
 
-            if len(versions) > 0:
+            if versions:
                 latest_version = sorted(versions.keys())[-1]
                 log.info(f"{latest_version=}")
 
@@ -184,7 +181,12 @@ def launch(additional_path: Path = None, app_dir: Path = None) -> int:
                         std_out = target_process.stdout
                         std_err = target_process.stderr
 
-                        if (std_err is not None and len(std_err.strip()) > 0) or (target_process.returncode != ok_return_code and target_process.returncode != restart_return_code):
+                        if (
+                            std_err is not None and len(std_err.strip()) > 0
+                        ) or target_process.returncode not in [
+                            ok_return_code,
+                            restart_return_code,
+                        ]:
                             # if there's a problem, log it with what the caller provides
                             for out, log_function in [(std_out, log.warning), (std_err, log.error)]:
                                 if out is not None and len(out.strip()) > 0:
