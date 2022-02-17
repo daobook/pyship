@@ -21,8 +21,11 @@ class RestartMonitor:
         Determine if there has been excessive frequency of restarts.  Return True if the time between all the most recent restarts are less than the "quick" time.
         :return: True if restarts have been excessive
         """
-        if len(self.restarts) < self.max_samples:
-            excessive = False
-        else:
-            excessive = all([j - i <= self.quick for i, j in zip(self.restarts[:-1], self.restarts[1:])])
-        return excessive
+        return (
+            False
+            if len(self.restarts) < self.max_samples
+            else all(
+                j - i <= self.quick
+                for i, j in zip(self.restarts[:-1], self.restarts[1:])
+            )
+        )

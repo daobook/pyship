@@ -56,7 +56,12 @@ def subprocess_run(
             target_process = subprocess.run(cmd, cwd=str(cwd), env=run_env, capture_output=True, text=True)
         std_out = target_process.stdout
         std_err = target_process.stderr
-        if (std_err is not None and len(std_err.strip()) > 0) or (target_process.returncode != ok_return_code and target_process.returncode != restart_return_code):
+        if (
+            std_err is not None and len(std_err.strip()) > 0
+        ) or target_process.returncode not in [
+            ok_return_code,
+            restart_return_code,
+        ]:
             # if there's a problem, output it with what the caller provides
             for out, log_function in [(std_out, stdout_log), (std_err, stderr_log)]:
                 if out is not None and len(out.strip()) > 0:

@@ -23,12 +23,11 @@ def file_download(url: str, destination_folder: Path, file_name: Path):
     else:
         log.info("get %s to %s" % (url, destination_path))
         response = requests.get(url, stream=True)
-        if response.status_code == 200:
-            with open(destination_path, "wb") as out_file:
-                shutil.copyfileobj(response.raw, out_file)
-            del response
-        else:
+        if response.status_code != 200:
             raise Exception(f"error getting {file_name} from {url}")
+        with open(destination_path, "wb") as out_file:
+            shutil.copyfileobj(response.raw, out_file)
+        del response
     return destination_path
 
 
@@ -41,10 +40,7 @@ def extract(source_folder: Path, source_file: Path, destination_folder: Path):
         with zipfile.ZipFile(source) as zf:
             # assumes a trusted .zip
             zf.extractall(destination_folder)
-    elif source_file.suffix == ".tgz":
-        with tarfile.open(source) as tf:
-            tf.extractall(destination_folder)
-    elif source_file.suffix == ".gz":
+    elif source_file.suffix in [".tgz", ".gz"]:
         with tarfile.open(source) as tf:
             tf.extractall(destination_folder)
     else:

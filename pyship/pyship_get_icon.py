@@ -41,11 +41,8 @@ def get_icon(target_app_info: AppInfo, ui_print: Callable) -> Path:
 
     if icon_path == icon_paths[-1]:
         s = f'{target_app_info.name} does not include its own icon - using {__application_name__} icon ("{icon_path}")'
-        log.info(s)
-        ui_print(s)
     else:
         s = f'icon path : "{icon_path}"'
-        log.info(s)
-        ui_print(s)
-
+    log.info(s)
+    ui_print(s)
     return icon_path

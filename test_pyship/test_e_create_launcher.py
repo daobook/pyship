@@ -25,7 +25,7 @@ def test_create_launcher():
     except FileNotFoundError:
         pass
 
-    for _ in range(0, 2):
+    for _ in range(2):
         mkdirs(tst_app_dirs.app_dir, remove_first=True)
         create_pyship_launcher(target_app_info, tst_app_dirs.app_dir)
         assert tst_app_dirs.launcher_exe_path.exists()
